@@ -43,7 +43,7 @@ class KnappsackPlugin implements Plugin<Project> {
     static final String PROP_KEY_STORE_FILE_NAME = 'knappsack.keystore.file'
     static final String PROP_KEY_STORE_PASSWORD = 'knappsack.keystore.password'
 
-    protected Project project;
+    protected Project project
 
     @Override
     void apply(Project project) {
@@ -52,10 +52,20 @@ class KnappsackPlugin implements Plugin<Project> {
         project.extensions.create('knappsack', KnappsackExtension, project)
         project.task('knappsackUpload', type: KnappsackUploadTask, group: 'Knappsack')
 
-        project.afterEvaluate {
-            validateProperties()
-            readConventionsFromProperties()
+        // Initialize the plug-in immediately if the project is already executed.
+        // Required for running from init scripts w/o build scripts.
+        if (project.state.executed) {
+            initialize()
+        } else {
+            project.afterEvaluate {
+                initialize()
+            }
         }
+    }
+
+    protected void initialize() {
+        validateProperties()
+        readConventionsFromProperties()
     }
 
     protected void validateProperties() {

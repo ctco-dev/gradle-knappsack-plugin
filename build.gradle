@@ -43,7 +43,7 @@ dependencies {
 
 artifactsBaseName = 'gradle-knappsack-plugin'
 group = 'lv.ctco.scm.gradle'
-version = '0.0.1'
+version = '0.0.2'
 
 test {
     useTestNG()
